@@ -1,1 +1,1 @@
-test version of couchpotato built from source
+test version of couchpotato
