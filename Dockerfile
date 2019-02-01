@@ -22,6 +22,9 @@ RUN \
 
 FROM lsiobase/alpine:${ALPINE_VER}
 
+# set python to use utf-8 rather than ascii.
+ENV PYTHONIOENCODING="UTF-8"
+
 # install runtime packages
 RUN \
 	apk add --no-cache \
