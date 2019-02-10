@@ -10,3 +10,5 @@ chown -R abc:abc \
 
 chmod 777 \
 	/var/log/couchpotato
+
+cd /blah

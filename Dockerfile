@@ -10,7 +10,7 @@ RUN \
 		curl
 
 # set shell
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+# SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # fetch source code
 RUN \
