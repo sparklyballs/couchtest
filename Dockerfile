@@ -1,18 +1,24 @@
 ARG ALPINE_VER="3.9"
 FROM alpine:${ALPINE_VER} as fetch-stage
 
+############## fetch stage ##############
+
 # install fetch packages
 RUN \
 	apk add --no-cache \
+		bash \
 		curl
 
-# fetch source
+# set shell
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+# fetch source code
 RUN \
 	set -ex \
 	&& mkdir -p \
 		/app/couchpotato \
 	&& COUCHPOTATO_RELEASE=$(curl -sX GET "https://api.github.com/repos/CouchPotato/CouchPotatoServer/commits/master" \
-		| awk '/sha/{print $4;exit}' FS='[""]') \
+		| awk '/sha/{print $4;exit}' FS='[""]') || : \
 	&& curl -o \
 	/tmp/couchpotato.tar.gz -L \
 	"https://github.com/CouchPotato/CouchPotatoServer/archive/${COUCHPOTATO_RELEASE}.tar.gz" \
@@ -21,6 +27,8 @@ RUN \
 	/app/couchpotato --strip-components=1
 
 FROM lsiobase/alpine:${ALPINE_VER}
+
+############## runtine stage ##############
 
 # set python to use utf-8 rather than ascii.
 ENV PYTHONIOENCODING="UTF-8"
