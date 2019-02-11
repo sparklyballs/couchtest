@@ -17,7 +17,7 @@ RUN \
 	set -ex \
 	&& mkdir -p \
 		/app/couchpotato \
-	&& COUCHPOTATO_RELEASE=$(curl -sX GET "https://api.github.com/repos/CouchPotato/CouchPotatoServer/commits/master" \
+	&& COUCHPOTATO_RELEASE=$(curl -sX GET "https://api.github.com/repos/CouchPotato/CouchPotatoServer/commits/develop" \
 		| awk '/sha/{print $4;exit}' FS='[""]') || : \
 	&& curl -o \
 	/tmp/couchpotato.tar.gz -L \
