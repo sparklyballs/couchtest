@@ -26,7 +26,7 @@ RUN \
 	/tmp/couchpotato.tar.gz -C \
 	/app/couchpotato --strip-components=1
 
-FROM lsiobase/alpine:${ALPINE_VER}
+FROM sparklyballs/alpine-test:${ALPINE_VER}
 
 ############## runtine stage ##############
 
