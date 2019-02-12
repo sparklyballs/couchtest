@@ -3,11 +3,15 @@ FROM alpine:${ALPINE_VER} as fetch-stage
 
 ############## fetch stage ##############
 
+# package versions
+ARG COUCHP_BRANCH="develop"
+
 # install fetch packages
 RUN \
 	apk add --no-cache \
 		bash \
-		curl
+		curl \
+		jq
 
 # set shell
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
@@ -17,11 +21,12 @@ RUN \
 	set -ex \
 	&& mkdir -p \
 		/app/couchpotato \
-	&& COUCHPOTATO_RELEASE=$(curl -sX GET "https://api.github.com/repos/CouchPotato/CouchPotatoServer/commits/develop" \
+	&& COUCHP_RAW_COMMIT=$(curl -sX GET "https://api.github.com/repos/CouchPotato/CouchPotatoServer/commits/${COUCHP_BRANCH}" \
 		| awk '/sha/{print $4;exit}' FS='[""]') || : \
+	&& COUCHP_COMMIT="${COUCHP_RAW_COMMIT:0:7}" \
 	&& curl -o \
 	/tmp/couchpotato.tar.gz -L \
-	"https://github.com/CouchPotato/CouchPotatoServer/archive/${COUCHPOTATO_RELEASE}.tar.gz" \
+	"https://github.com/CouchPotato/CouchPotatoServer/archive/${COUCHP_COMMIT}.tar.gz" \
 	&& tar xf \
 	/tmp/couchpotato.tar.gz -C \
 	/app/couchpotato --strip-components=1
