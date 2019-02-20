@@ -22,7 +22,7 @@ RUN \
 	&& mkdir -p \
 		/app/couchpotato \
 	&& COUCHP_RAW_COMMIT=$(curl -sX GET "https://api.github.com/repos/CouchPotato/CouchPotatoServer/commits/${COUCHP_BRANCH}" \
-		| awk '/sha/{print $4;exit}' FS='[""]') || : \
+		| jq -r '.sha') \
 	&& COUCHP_COMMIT="${COUCHP_RAW_COMMIT:0:7}" \
 	&& curl -o \
 	/tmp/couchpotato.tar.gz -L \
