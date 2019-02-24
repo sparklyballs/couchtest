@@ -10,23 +10,28 @@ ARG COUCHP_BRANCH="develop"
 RUN \
 	apk add --no-cache \
 		bash \
-		curl \
-		jq
+		curl
 
 # set shell
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-# fetch source code
+# fetch version file
 RUN \
 	set -ex \
+	&& curl -o \
+	/tmp/version.txt -L \
+	"https://raw.githubusercontent.com/sparklyballs/versioning/master/version.txt"
+
+# fetch source code
+# hadolint ignore=SC1091
+RUN \
+	. /tmp/version.txt \
+	&& set -ex \
 	&& mkdir -p \
 		/app/couchpotato \
-	&& COUCHP_RAW_COMMIT=$(curl -sX GET "https://api.github.com/repos/CouchPotato/CouchPotatoServer/commits/${COUCHP_BRANCH}" \
-		| jq -r '.sha') \
-	&& COUCHP_COMMIT="${COUCHP_RAW_COMMIT:0:7}" \
 	&& curl -o \
 	/tmp/couchpotato.tar.gz -L \
-	"https://github.com/CouchPotato/CouchPotatoServer/archive/${COUCHP_COMMIT}.tar.gz" \
+	"https://github.com/CouchPotato/CouchPotatoServer/archive/${COUCHPOTATO_COMMIT}.tar.gz" \
 	&& tar xf \
 	/tmp/couchpotato.tar.gz -C \
 	/app/couchpotato --strip-components=1
