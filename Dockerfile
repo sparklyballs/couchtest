@@ -3,9 +3,6 @@ FROM alpine:${ALPINE_VER} as fetch-stage
 
 ############## fetch stage ##############
 
-# package versions
-ARG COUCHP_BRANCH="develop"
-
 # install fetch packages
 RUN \
 	apk add --no-cache \
